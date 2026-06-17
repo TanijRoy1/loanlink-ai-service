@@ -1,16 +1,20 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import reportRoutes from "./routes/report.routes";
-import dotenv from "dotenv";
 import { connectDB } from "./config/db";
 
 const app = express();
-const PORT = 5001;
+const PORT = process.env.PORT || 5001;
 
-dotenv.config();
+// Database
 connectDB();
 
+// Middleware
 app.use(express.json());
 
+// Health Check
 app.get("/", (req, res) => {
   res.send("AI Service Running");
 });
@@ -18,13 +22,10 @@ app.get("/", (req, res) => {
 // API Routes
 app.use("/api/reports", reportRoutes);
 
+// Start Server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-
-
-
 
 // Handle Process Shutdown
 process.on("SIGINT", async () => {

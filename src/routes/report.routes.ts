@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
-import {prisma} from "../config/db";
+import { prisma } from "../config/db";
+import { testAI } from "../controllers/report.controller";
 
 const router = express.Router();
 
@@ -18,5 +19,7 @@ router.get("/test-db", async (req, res) => {
     users,
   });
 });
+
+router.get("/test-ai", testAI);
 
 export default router;
