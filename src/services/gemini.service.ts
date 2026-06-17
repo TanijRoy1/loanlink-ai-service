@@ -57,7 +57,15 @@ export const generateLoanSummary = async (): Promise<LoanSummaryOutput> => {
       .replace(/```/g, "")
       .trim();
 
-    const parsedResponse: LoanSummaryOutput = JSON.parse(rawText);
+    let parsedResponse: LoanSummaryOutput;
+
+    try {
+      parsedResponse = JSON.parse(rawText);
+    } catch {
+      throw new Error("Invalid Gemini response");
+    }
+
+    return parsedResponse;
 
     return parsedResponse;
   } catch (error) {
