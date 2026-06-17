@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { LoanSummaryInput } from "../types/report.types";
+import { LoanSummaryInput, LoanSummaryOutput } from "../types/report.types";
 
 const apiKey = process.env.GEMINI_API_KEY;
 
@@ -11,7 +11,7 @@ const ai = new GoogleGenAI({
   apiKey,
 });
 
-export const generateLoanSummary = async (): Promise<string> => {
+export const generateLoanSummary = async (): Promise<LoanSummaryOutput> => {
   const loanData: LoanSummaryInput = {
     applicantName: "John Doe",
     monthlyIncome: 50000,
@@ -25,11 +25,19 @@ export const generateLoanSummary = async (): Promise<string> => {
                  
                  ${JSON.stringify(loanData, null, 2)}
                  
-                 Provide:
-                 1. A brief summary
-                 2. Repayment analysis
-                 3. Risk analysis
-                 4. Recommendations
+                 Return ONLY valid JSON.
+                 
+                 Do not use markdown.
+                 Do not wrap with triple backticks.
+                 
+                 Use this exact format:
+                 
+                 {
+                   "summary":"",
+                   "repaymentAnalysis":"",
+                   "riskAnalysis":"",
+                   "recommendations":[]
+                 }
                  `;
 
   try {
@@ -38,7 +46,20 @@ export const generateLoanSummary = async (): Promise<string> => {
       contents: prompt,
     });
 
-    return response.text || "No response generated";
+    const text = response.text;
+
+    if (!text) {
+      throw new Error("Gemini returned an empty response");
+    }
+
+    const rawText = text
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
+
+    const parsedResponse: LoanSummaryOutput = JSON.parse(rawText);
+
+    return parsedResponse;
   } catch (error) {
     console.error("Gemini Error:", error);
     throw new Error("Failed to generate loan summary");
