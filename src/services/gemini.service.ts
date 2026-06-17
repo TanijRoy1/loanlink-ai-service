@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 import { LoanSummaryInput } from "../types/report.types";
 
 const apiKey = process.env.GEMINI_API_KEY;
@@ -7,10 +7,8 @@ if (!apiKey) {
   throw new Error("GEMINI_API_KEY is not defined");
 }
 
-const genAI = new GoogleGenerativeAI(apiKey);
-
-const model = genAI.getGenerativeModel({
-  model: "gemini-2.5-flash",
+const ai = new GoogleGenAI({
+  apiKey,
 });
 
 export const generateLoanSummary = async (): Promise<string> => {
@@ -23,21 +21,24 @@ export const generateLoanSummary = async (): Promise<string> => {
   };
 
   const prompt = `
-                   Analyze the following loan application:
-                   
-                   ${JSON.stringify(loanData, null, 2)}
-                   
-                   Provide:
-                   1. A brief summary
-                   2. Repayment analysis
-                   3. Risk analysis
-                   4. Recommendations
-                   `;
+                 Analyze the following loan application:
+                 
+                 ${JSON.stringify(loanData, null, 2)}
+                 
+                 Provide:
+                 1. A brief summary
+                 2. Repayment analysis
+                 3. Risk analysis
+                 4. Recommendations
+                 `;
 
   try {
-    const result = await model.generateContent(prompt);
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+    });
 
-    return result.response.text();
+    return response.text || "No response generated";
   } catch (error) {
     console.error("Gemini Error:", error);
     throw new Error("Failed to generate loan summary");
