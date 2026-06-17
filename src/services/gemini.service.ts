@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { LoanSummaryInput, LoanSummaryOutput } from "../types/report.types";
+import { buildLoanSummaryPrompt } from "../prompts/loanSummary.prompt";
 
 const apiKey = process.env.GEMINI_API_KEY;
 
@@ -20,25 +21,7 @@ export const generateLoanSummary = async (): Promise<LoanSummaryOutput> => {
     purpose: "Business Expansion",
   };
 
-  const prompt = `
-                 Analyze the following loan application:
-                 
-                 ${JSON.stringify(loanData, null, 2)}
-                 
-                 Return ONLY valid JSON.
-                 
-                 Do not use markdown.
-                 Do not wrap with triple backticks.
-                 
-                 Use this exact format:
-                 
-                 {
-                   "summary":"",
-                   "repaymentAnalysis":"",
-                   "riskAnalysis":"",
-                   "recommendations":[]
-                 }
-                 `;
+  const prompt = buildLoanSummaryPrompt(loanData);
 
   try {
     const response = await ai.models.generateContent({
