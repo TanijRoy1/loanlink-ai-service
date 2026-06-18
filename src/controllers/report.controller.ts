@@ -1,10 +1,17 @@
 import { Request, Response } from "express";
 import { generateLoanSummary } from "../services/gemini.service";
+import { LoanSummaryInput } from "../types/report.types";
 
 // testAI
 export const testAI = async (req: Request, res: Response): Promise<void> => {
   try {
-    const result = await generateLoanSummary();
+    const result = await generateLoanSummary({
+      applicantName: "John Doe",
+      monthlyIncome: 50000,
+      loanAmount: 300000,
+      duration: 24,
+      purpose: "Business Expansion",
+    });
 
     res.status(200).json({
       success: true,
@@ -25,8 +32,21 @@ export const createReport = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  res.status(200).json({
-    success: true,
-    message: "create report endpoint working",
-  });
+  try {
+    const loanData: LoanSummaryInput = req.body;
+
+    const report = await generateLoanSummary(loanData);
+
+    res.status(200).json({
+      success: true,
+      report,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to generate report",
+    });
+  }
 };

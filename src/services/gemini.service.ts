@@ -12,15 +12,9 @@ const ai = new GoogleGenAI({
   apiKey,
 });
 
-export const generateLoanSummary = async (): Promise<LoanSummaryOutput> => {
-  const loanData: LoanSummaryInput = {
-    applicantName: "John Doe",
-    monthlyIncome: 50000,
-    loanAmount: 300000,
-    duration: 24,
-    purpose: "Business Expansion",
-  };
-
+export const generateLoanSummary = async (
+  loanData: LoanSummaryInput,
+): Promise<LoanSummaryOutput> => {
   const prompt = buildLoanSummaryPrompt(loanData);
 
   try {
