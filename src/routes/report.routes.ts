@@ -11,14 +11,14 @@ router.get("/", (req: Request, res: Response) => {
   });
 });
 
-router.get("/test-db", async (req, res) => {
-  const users = await prisma.user.findMany();
+// router.get("/test-db", async (req, res) => {
+//   const users = await prisma.user.findMany();
 
-  res.json({
-    success: true,
-    users,
-  });
-});
+//   res.json({
+//     success: true,
+//     users,
+//   });
+// });
 
 router.get("/test-ai", testAI);
 router.post("/", createReport);

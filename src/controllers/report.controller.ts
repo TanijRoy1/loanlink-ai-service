@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { generateLoanSummary } from "../services/gemini.service";
 import { LoanSummaryInput } from "../types/report.types";
+import { saveReport } from "../services/report.service";
 
 // testAI
 export const testAI = async (req: Request, res: Response): Promise<void> => {
@@ -37,9 +38,11 @@ export const createReport = async (
 
     const report = await generateLoanSummary(loanData);
 
-    res.status(200).json({
+    const savedReport = await saveReport(loanData, report);
+
+    res.status(201).json({
       success: true,
-      report,
+      data: savedReport,
     });
   } catch (error) {
     console.error(error);
