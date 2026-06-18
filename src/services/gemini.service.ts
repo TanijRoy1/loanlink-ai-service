@@ -49,8 +49,6 @@ export const generateLoanSummary = async (): Promise<LoanSummaryOutput> => {
     }
 
     return parsedResponse;
-
-    return parsedResponse;
   } catch (error) {
     console.error("Gemini Error:", error);
     throw new Error("Failed to generate loan summary");
