@@ -21,3 +21,9 @@ export const saveReport = async (
     },
   });
 };
+
+export const findReportById = (id: string) => {
+  return prisma.report.findUnique({
+    where: { id },
+  });
+};

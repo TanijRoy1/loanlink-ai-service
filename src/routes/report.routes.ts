@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { prisma } from "../config/db";
-import { testAI, createReport } from "../controllers/report.controller";
+import { testAI, createReport, getReport } from "../controllers/report.controller";
 
 const router = express.Router();
 
@@ -22,5 +22,6 @@ router.get("/", (req: Request, res: Response) => {
 
 router.get("/test-ai", testAI);
 router.post("/", createReport);
+router.get("/:id", getReport);
 
 export default router;
