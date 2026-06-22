@@ -6,6 +6,7 @@ import {
   getReport,
   getReports,
 } from "../controllers/report.controller";
+import { validateLoanRequest } from "../utils/validateLoanRequest";
 
 const router = express.Router();
 
@@ -26,7 +27,7 @@ const router = express.Router();
 // });
 
 router.get("/test-ai", testAI);
-router.post("/", createReport);
+router.post("/", validateLoanRequest, createReport);
 router.get("/", getReports);
 router.get("/:id", getReport);
 
