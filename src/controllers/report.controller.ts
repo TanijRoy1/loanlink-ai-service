@@ -10,6 +10,8 @@ import { generateAndAttachPDF } from "../services/pdfReport.service";
 export const testAI = async (req: Request, res: Response): Promise<void> => {
   try {
     const result = await generateLoanSummary({
+      loanId: "loan123",
+      userId: "user456",
       applicantName: "John Doe",
       monthlyIncome: 50000,
       loanAmount: 300000,

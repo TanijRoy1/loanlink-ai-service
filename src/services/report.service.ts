@@ -9,8 +9,8 @@ export const saveReport = async (
 ) => {
   return prisma.report.create({
     data: {
-      loanId: crypto.randomUUID(),
-      userId: crypto.randomUUID(),
+      loanId: loanData.loanId,
+      userId: loanData.userId,
 
       summary: aiReport.summary,
 

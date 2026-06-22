@@ -1,4 +1,6 @@
 export interface LoanSummaryInput {
+  loanId: string;
+  userId: string;
   applicantName: string;
   monthlyIncome: number;
   loanAmount: number;
