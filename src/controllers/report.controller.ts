@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { generateLoanSummary } from "../services/gemini.service";
 import { LoanSummaryInput } from "../types/report.types";
 import { saveReport } from "../services/report.service";
-import { findReportById } from "../services/report.service";
+import { findReportById, findAllReports } from "../services/report.service";
 
 // testAI
 export const testAI = async (req: Request, res: Response): Promise<void> => {
@@ -55,7 +55,25 @@ export const createReport = async (
   }
 };
 
-// getReport
+// get all reports
+export const getReports = async (req: Request, res: Response) => {
+  // console.log("getReports controller called");
+  try {
+    const reports = await findAllReports();
+
+    return res.status(200).json({
+      success: true,
+      data: reports,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch reports",
+    });
+  }
+};
+
+// getReport by id
 interface ReportParams {
   id: string;
 }

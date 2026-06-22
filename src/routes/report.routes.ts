@@ -1,15 +1,20 @@
 import express, { Request, Response } from "express";
 import { prisma } from "../config/db";
-import { testAI, createReport, getReport } from "../controllers/report.controller";
+import {
+  testAI,
+  createReport,
+  getReport,
+  getReports,
+} from "../controllers/report.controller";
 
 const router = express.Router();
 
-router.get("/", (req: Request, res: Response) => {
-  res.json({
-    success: true,
-    message: "Get all reports route working",
-  });
-});
+// router.get("/", (req: Request, res: Response) => {
+//   res.json({
+//     success: true,
+//     message: "Get all reports route working",
+//   });
+// });
 
 // router.get("/test-db", async (req, res) => {
 //   const users = await prisma.user.findMany();
@@ -22,6 +27,7 @@ router.get("/", (req: Request, res: Response) => {
 
 router.get("/test-ai", testAI);
 router.post("/", createReport);
+router.get("/", getReports);
 router.get("/:id", getReport);
 
 export default router;

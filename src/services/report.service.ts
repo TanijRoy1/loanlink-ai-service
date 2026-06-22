@@ -22,6 +22,14 @@ export const saveReport = async (
   });
 };
 
+export const findAllReports = () => {
+  return prisma.report.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
 export const findReportById = (id: string) => {
   return prisma.report.findUnique({
     where: { id },
