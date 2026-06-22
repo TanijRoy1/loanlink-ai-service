@@ -130,3 +130,35 @@ export const getReport = async (req: Request<ReportParams>, res: Response) => {
     });
   }
 };
+
+// download Report PDF
+export const downloadReport = async (
+  req: Request<ReportParams>,
+  res: Response,
+) => {
+  try {
+    const { id } = req.params;
+
+    const report = await prisma.report.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!report?.pdfPath) {
+      return res.status(404).json({
+        success: false,
+        message: "PDF not found",
+      });
+    }
+
+    return res.download(report.pdfPath);
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to download PDF",
+    });
+  }
+};
