@@ -3,6 +3,8 @@ import { generateLoanSummary } from "../services/gemini.service";
 import { LoanSummaryInput } from "../types/report.types";
 import { saveReport } from "../services/report.service";
 import { findReportById, findAllReports } from "../services/report.service";
+import { generatePDF } from "../services/pdf.service";
+import { prisma } from "../config/db";
 
 // testAI
 export const testAI = async (req: Request, res: Response): Promise<void> => {
@@ -41,9 +43,36 @@ export const createReport = async (
 
     const savedReport = await saveReport(loanData, report);
 
+    // STEP 1: prepare PDF data
+    const pdfData = {
+      applicantName: loanData.applicantName,
+      loanAmount: loanData.loanAmount,
+      duration: loanData.duration,
+      purpose: loanData.purpose,
+
+      summary: report.summary,
+      repaymentAnalysis: report.repaymentAnalysis,
+      riskAnalysis: report.riskAnalysis,
+
+      recommendations: report.recommendations,
+    };
+
+    // STEP 2: generate PDF
+    const filePath = await generatePDF(pdfData, savedReport.id);
+
+    // STEP 3: update report with PDF path
+    const updatedReport = await prisma.report.update({
+      where: {
+        id: savedReport.id,
+      },
+      data: {
+        pdfPath: filePath,
+      },
+    });
+
     res.status(201).json({
       success: true,
-      data: savedReport,
+      data: updatedReport,
     });
   } catch (error) {
     console.error(error);
