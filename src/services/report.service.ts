@@ -12,11 +12,17 @@ export const saveReport = async (
       loanId: loanData.loanId,
       userId: loanData.userId,
 
+      applicantName: loanData.applicantName,
+      monthlyIncome: loanData.monthlyIncome,
+      loanAmount: loanData.loanAmount,
+      duration: loanData.duration,
+      purpose: loanData.purpose,
+
       summary: aiReport.summary,
-
       repaymentAnalysis: aiReport.repaymentAnalysis,
-
       riskAnalysis: aiReport.riskAnalysis,
+
+      recommendations: aiReport.recommendations,
 
       status: "completed",
       pdfPath: pdfPath || null,

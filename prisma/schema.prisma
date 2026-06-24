@@ -9,13 +9,26 @@ datasource db {
 
 model Report {
   id                String   @id @default(cuid())
+
   loanId            String?
   userId            String?
+
+  applicantName     String?
+  monthlyIncome     Float?
+  loanAmount        Float?
+  duration          Int?
+  purpose           String?
+
   summary           String?
   repaymentAnalysis String?
   riskAnalysis      String?
+
+  recommendations   Json?
+
   pdfPath           String?
+
   status            String   @default("completed")
+
   generatedAt       DateTime @default(now())
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt

@@ -147,10 +147,13 @@ export const downloadReport = async (
     doc.pipe(res);
 
     streamPDF(doc, {
-      applicantName: "Not Available",
-      loanAmount: 0,
-      duration: 0,
-      purpose: "Not Available",
+      applicantName: report.applicantName || "Unknown",
+
+      loanAmount: report.loanAmount || 0,
+
+      duration: report.duration || 0,
+
+      purpose: report.purpose || "Not specified",
 
       summary: report.summary || "",
 
@@ -158,7 +161,9 @@ export const downloadReport = async (
 
       riskAnalysis: report.riskAnalysis || "",
 
-      recommendations: [],
+      recommendations: Array.isArray(report.recommendations)
+        ? report.recommendations.map(String)
+        : [],
     });
 
     doc.end();
