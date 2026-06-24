@@ -4,6 +4,8 @@ import { LoanSummaryInput } from "../types/report.types";
 import { saveReport } from "../services/report.service";
 import { findReportById, findAllReports } from "../services/report.service";
 import { prisma } from "../config/db";
+import PDFDocument from "pdfkit";
+import { streamPDF } from "../services/pdf.service";
 import { generateAndAttachPDF } from "../services/pdfReport.service";
 
 // testAI
@@ -126,14 +128,40 @@ export const downloadReport = async (
       },
     });
 
-    if (!report?.pdfPath) {
+    if (!report) {
       return res.status(404).json({
         success: false,
-        message: "PDF not found",
+        message: "Report not found",
       });
     }
 
-    return res.download(report.pdfPath);
+    const doc = new PDFDocument();
+
+    res.setHeader("Content-Type", "application/pdf");
+
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=loan-report-${id}.pdf`,
+    );
+
+    doc.pipe(res);
+
+    streamPDF(doc, {
+      applicantName: "Not Available",
+      loanAmount: 0,
+      duration: 0,
+      purpose: "Not Available",
+
+      summary: report.summary || "",
+
+      repaymentAnalysis: report.repaymentAnalysis || "",
+
+      riskAnalysis: report.riskAnalysis || "",
+
+      recommendations: [],
+    });
+
+    doc.end();
   } catch (error) {
     console.error(error);
 
