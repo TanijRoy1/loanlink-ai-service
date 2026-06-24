@@ -6,3 +6,4 @@ uploads/
 /src/generated/prisma
 uploads/reports/*
 !uploads/reports/.gitkeep
+npm-debug.log
