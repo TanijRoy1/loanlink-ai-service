@@ -71,6 +71,8 @@ export const getReports = async (req: Request, res: Response) => {
       data: reports,
     });
   } catch (error) {
+    console.error("GET REPORTS ERROR:");
+    console.error(error);
     return res.status(500).json({
       success: false,
       message: "Failed to fetch reports",

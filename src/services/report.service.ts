@@ -1,4 +1,3 @@
-import crypto from "crypto";
 import { prisma } from "../config/db";
 import { LoanSummaryInput, LoanSummaryOutput } from "../types/report.types";
 
@@ -28,12 +27,21 @@ export const saveReport = async (
   });
 };
 
-export const findAllReports = () => {
-  return prisma.report.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+export const findAllReports = async () => {
+  try {
+    const reports = await prisma.report.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    console.log("Reports fetched:", reports.length);
+
+    return reports;
+  } catch (error) {
+    console.error("PRISMA FIND REPORTS ERROR:", error);
+    throw error;
+  }
 };
 
 export const findReportById = (id: string) => {
