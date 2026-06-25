@@ -70,12 +70,13 @@ export const getReports = async (req: Request, res: Response) => {
       success: true,
       data: reports,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("GET REPORTS ERROR:");
     console.error(error);
+
     return res.status(500).json({
       success: false,
-      message: "Failed to fetch reports",
+      message: error?.message || "Failed to fetch reports",
     });
   }
 };
