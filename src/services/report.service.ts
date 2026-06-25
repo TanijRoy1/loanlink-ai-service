@@ -25,7 +25,6 @@ export const saveReport = async (
       recommendations: aiReport.recommendations,
 
       status: "completed",
-      pdfPath: pdfPath || null,
     },
   });
 };

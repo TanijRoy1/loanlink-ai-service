@@ -6,7 +6,6 @@ import { findReportById, findAllReports } from "../services/report.service";
 import { prisma } from "../config/db";
 import PDFDocument from "pdfkit";
 import { streamPDF } from "../services/pdf.service";
-import { generateAndAttachPDF } from "../services/pdfReport.service";
 
 // testAI
 export const testAI = async (req: Request, res: Response): Promise<void> => {
@@ -47,15 +46,9 @@ export const createReport = async (
 
     const savedReport = await saveReport(loanData, report);
 
-    const updatedReport = await generateAndAttachPDF(
-      loanData,
-      report,
-      savedReport.id,
-    );
-
     res.status(201).json({
       success: true,
-      data: updatedReport,
+      data: savedReport,
     });
   } catch (error) {
     console.error(error);
