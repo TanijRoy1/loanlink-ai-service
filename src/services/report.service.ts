@@ -5,7 +5,6 @@ import { LoanSummaryInput, LoanSummaryOutput } from "../types/report.types";
 export const saveReport = async (
   loanData: LoanSummaryInput,
   aiReport: LoanSummaryOutput,
-  pdfPath?: string,
 ) => {
   return prisma.report.create({
     data: {
